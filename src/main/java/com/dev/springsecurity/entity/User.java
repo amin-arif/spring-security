@@ -22,13 +22,14 @@ public class User {
 
 	private String lastName;
 
+	@Column(unique = true, nullable = false)
 	private String email;
 
 	@Column(length = 60)
 	private String password;
 
+	@Column(nullable = false)
 	private String role;
 
-	@Column(columnDefinition = "boolean default false")
-	private Boolean enabled;
+	private Boolean enabled = false;
 }

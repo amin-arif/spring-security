@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -18,10 +15,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VerificationToken {
-	// Expiration time in minutes
-	@Transient
-	@Value("${token.expiration.time}")
-	private final int TOKEN_EXPIRATION_TIME = 10;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,11 +42,10 @@ public class VerificationToken {
 	}
 
 	private Date generateExpirationTime() {
-//		LocalDateTime localDateTime = LocalDateTime.now();
-//		localDateTime.plusMinutes(TOKEN_EXPIRATION_TIME);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(new Date().getTime());
-		calendar.add(Calendar.MINUTE, TOKEN_EXPIRATION_TIME);
+		int tokenExpirationTime = 5; // In minutes
+		calendar.add(Calendar.MINUTE, tokenExpirationTime);
 		return new Date(calendar.getTime().getTime());
 	}
 }

@@ -12,6 +12,3 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-token:
-  expiration:
-    time: 20

@@ -16,7 +16,7 @@ import java.util.UUID;
 public class RegistrationCompleteEventListener
 		implements ApplicationListener<RegistrationCompleteEvent> {
 
-	UserService userService;
+	private final UserService userService;
 
 	@Override
 	public void onApplicationEvent(RegistrationCompleteEvent event) {
@@ -28,6 +28,6 @@ public class RegistrationCompleteEventListener
 				+ "/verifyRegistrationToken?token="
 				+ token;
 		// Further it will send by Email
-		log.info("Clink link to verify your account: {}" + url);
+		log.info("Click link to verify your account: {}" + url);
 	}
 }
