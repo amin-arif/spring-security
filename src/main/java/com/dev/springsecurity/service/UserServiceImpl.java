@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,27 +29,39 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void saveUserVerificationToken(User user, String token) {
-		VerificationToken verificationToken = new VerificationToken(user, token);
-		verificationTokenRepository.save(verificationToken);
+		verificationTokenRepository.save(
+				new VerificationToken(user, token)
+		);
 	}
 
 	@Override
 	public String verifyUserToken(String token) {
-		VerificationToken verificationToken =
+		Optional<VerificationToken> verificationToken =
 				verificationTokenRepository.findByToken(token);
-		if (verificationToken == null) {
+		if (verificationToken.isEmpty()) {
 			return "Invalid token";
 		}
 
 		Date currentTime = Calendar.getInstance().getTime();
-		if (currentTime.getTime() - verificationToken.getExpirationTime().getTime() >= 0) {
+		if (currentTime.getTime() - verificationToken.get().getExpirationTime().getTime() >= 0) {
 			return "Token expired";
 		}
 
-		User user = verificationToken.getUser();
+		User user = verificationToken.get().getUser();
 		user.setEnabled(Boolean.TRUE);
 		userRepository.save(user);
 		return "User verified";
+	}
+
+	@Override
+	public Optional<User> resendUserToken(String oldToken) {
+		Optional<VerificationToken> token = verificationTokenRepository.findByToken(oldToken);
+		if (token.isEmpty()) {
+			return Optional.empty();
+		}
+		User user = token.get().getUser();
+		verificationTokenRepository.delete(token.get());
+		return Optional.of(user);
 	}
 
 	private User prepareUser(UserDTO userDTO) {

@@ -39,6 +39,22 @@ public class UserRegistrationController {
 		return userService.verifyUserToken(token);
 	}
 
+	@GetMapping("/user/token/resend")
+	public void tokenResend(@RequestParam("token") String oldToken,
+							  HttpServletRequest request) {
+		userService.resendUserToken(oldToken).ifPresentOrElse(
+				user -> applicationEventPublisher.publishEvent(
+						new RegistrationCompleteEvent(
+								user,
+								getApplicationUrl(request)
+						)
+				),
+				() -> {
+					throw new RuntimeException("Invalid token");
+				}
+		);
+	}
+
 	private String getApplicationUrl(HttpServletRequest request) {
 		return "http://"
 				+ request.getServerName()
