@@ -25,9 +25,9 @@ public class RegistrationCompleteEventListener
 		userService.saveUserVerificationToken(user, token);
 
 		String url = event.getApplicationUrl()
-				+ "/verifyRegistrationToken?token="
+				+ "/user/verify?token="
 				+ token;
 		// Further it will send by Email
-		log.info("Click link to verify your account: {}" + url);
+		log.info("Click link to verify your account: {}", url);
 	}
 }

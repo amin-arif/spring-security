@@ -12,8 +12,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class WebSecurityConfig {
 
-	private static final String[] AUTH_WHITELIST_URLS = {
-			"/user/create"
+	private static final String[] AUTH_WHITE_LIST_URLS = {
+			"/user/create",
+			"/user/verify/**"
 	};
 
 	@Bean
@@ -29,7 +30,7 @@ public class WebSecurityConfig {
 				.csrf()
 				.disable()
 				.authorizeHttpRequests()
-				.requestMatchers(AUTH_WHITELIST_URLS)
+				.requestMatchers(AUTH_WHITE_LIST_URLS)
 				.permitAll();
 		return httpSecurity.build();
 	}

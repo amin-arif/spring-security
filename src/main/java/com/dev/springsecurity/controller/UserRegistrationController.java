@@ -8,9 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +17,8 @@ public class UserRegistrationController {
 	private final UserService userService;
 	private final ApplicationEventPublisher applicationEventPublisher;
 
-	@PostMapping("user/create")
-	public HttpStatus registerUser(
+	@PostMapping("/user/create")
+	public HttpStatus createUser(
 			@RequestBody UserDTO userDTO,
 			HttpServletRequest httpServletRequest) {
 		User user = userService.saveUser(userDTO);
@@ -36,8 +34,13 @@ public class UserRegistrationController {
 		return HttpStatus.BAD_REQUEST;
 	}
 
+	@GetMapping("/user/verify")
+	public String verifyUser(@RequestParam("token") String token) {
+		return userService.verifyUserToken(token);
+	}
+
 	private String getApplicationUrl(HttpServletRequest request) {
-		return "https://"
+		return "http://"
 				+ request.getServerName()
 				+ ":"
 				+ request.getServerPort()
