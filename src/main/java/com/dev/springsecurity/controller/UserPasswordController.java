@@ -23,4 +23,9 @@ public class UserPasswordController {
 		return passwordService.verifyUserNewPassword(token, dto.newPassword());
 	}
 
+	@PutMapping("/user/password/change")
+	public String changePassword(@RequestBody PasswordDTO dto) {
+		return passwordService.changeUserPassword(dto);
+	}
+
 }

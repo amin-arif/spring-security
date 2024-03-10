@@ -17,7 +17,8 @@ public class WebSecurityConfig {
 			"/user/verify/**",
 			"/user/token/resend*",
 			"user/password/forget*",
-			"user/password/verify*"
+			"user/password/verify*",
+			"user/password/change*"
 	};
 
 	@Bean

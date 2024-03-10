@@ -1,5 +1,6 @@
 package com.dev.springsecurity.service;
 
+import com.dev.springsecurity.dto.PasswordDTO;
 import com.dev.springsecurity.entity.ForgetPasswordToken;
 import com.dev.springsecurity.entity.User;
 import com.dev.springsecurity.repository.ForgetPasswordTokenRepository;
@@ -8,7 +9,6 @@ import com.dev.springsecurity.util.CommonUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,10 +53,28 @@ public class PasswordServiceImpl implements PasswordService {
 			return "Forget token expired";
 		}
 
-		User user = passwordToken.get().getUser();
-		user.setPassword(passwordEncoder.encode(newPassword));
-		userRepository.save(user);
+		setPassword(passwordToken.get().getUser(), newPassword);
 
 		return "New password set successfully";
+	}
+
+	@Override
+	public String changeUserPassword(PasswordDTO dto) {
+		Optional<User> user = userRepository.findByEmail(dto.email());
+		if (user.isEmpty()) {
+			return "User not found by email";
+		}
+
+		if (!passwordEncoder.matches(dto.oldPassword(), user.get().getPassword())) {
+			return "Wrong password";
+		}
+
+		setPassword(user.get(), dto.newPassword());
+		return "Password updated successfully";
+	}
+
+	private void setPassword(User user, String newPassword) {
+		user.setPassword(passwordEncoder.encode(newPassword));
+		userRepository.save(user);
 	}
 }
