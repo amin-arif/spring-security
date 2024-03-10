@@ -15,7 +15,9 @@ public class WebSecurityConfig {
 	private static final String[] AUTH_WHITE_LIST_URLS = {
 			"/user/create",
 			"/user/verify/**",
-			"/user/token/resend*"
+			"/user/token/resend*",
+			"user/password/forget*",
+			"user/password/verify*"
 	};
 
 	@Bean
