@@ -4,6 +4,7 @@ import com.dev.springsecurity.dto.UserDTO;
 import com.dev.springsecurity.entity.User;
 import com.dev.springsecurity.event.RegistrationCompleteEvent;
 import com.dev.springsecurity.service.UserService;
+import com.dev.springsecurity.utility.CommonUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -26,7 +27,7 @@ public class UserRegistrationController {
 			applicationEventPublisher.publishEvent(
 					new RegistrationCompleteEvent(
 							user,
-							getApplicationUrl(httpServletRequest)
+							CommonUtil.getApplicationUrl(httpServletRequest)
 					)
 			);
 			return HttpStatus.CREATED;
@@ -46,21 +47,13 @@ public class UserRegistrationController {
 				user -> applicationEventPublisher.publishEvent(
 						new RegistrationCompleteEvent(
 								user,
-								getApplicationUrl(request)
+								CommonUtil.getApplicationUrl(request)
 						)
 				),
 				() -> {
 					throw new RuntimeException("Invalid token");
 				}
 		);
-	}
-
-	private String getApplicationUrl(HttpServletRequest request) {
-		return "http://"
-				+ request.getServerName()
-				+ ":"
-				+ request.getServerPort()
-				+ request.getContextPath();
 	}
 
 }
