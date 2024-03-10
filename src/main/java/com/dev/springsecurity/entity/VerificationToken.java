@@ -1,12 +1,12 @@
 package com.dev.springsecurity.entity;
 
+import com.dev.springsecurity.util.CommonUtil;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -32,20 +32,14 @@ public class VerificationToken {
 
 	public VerificationToken(String token) {
 		this.token = token;
-		this.expirationTime = generateExpirationTime();
+		this.expirationTime = CommonUtil.generateExpirationTime(5);
 	}
 
 	public VerificationToken(User user, String token) {
 		this.user = user;
 		this.token = token;
-		this.expirationTime = generateExpirationTime();
+		this.expirationTime = CommonUtil.generateExpirationTime(5);
 	}
 
-	private Date generateExpirationTime() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(new Date().getTime());
-		int tokenExpirationTime = 5; // In minutes
-		calendar.add(Calendar.MINUTE, tokenExpirationTime);
-		return new Date(calendar.getTime().getTime());
-	}
+
 }

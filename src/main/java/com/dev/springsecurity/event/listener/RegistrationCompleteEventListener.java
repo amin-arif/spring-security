@@ -3,12 +3,11 @@ package com.dev.springsecurity.event.listener;
 import com.dev.springsecurity.entity.User;
 import com.dev.springsecurity.event.RegistrationCompleteEvent;
 import com.dev.springsecurity.service.UserService;
+import com.dev.springsecurity.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -21,7 +20,7 @@ public class RegistrationCompleteEventListener
 	@Override
 	public void onApplicationEvent(RegistrationCompleteEvent event) {
 		User user = event.getUser();
-		String token = UUID.randomUUID().toString();
+		String token = CommonUtil.generateToken();
 		userService.saveUserVerificationToken(user, token);
 
 		String url = event.getApplicationUrl()

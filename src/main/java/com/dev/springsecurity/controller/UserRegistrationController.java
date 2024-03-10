@@ -4,7 +4,7 @@ import com.dev.springsecurity.dto.UserDTO;
 import com.dev.springsecurity.entity.User;
 import com.dev.springsecurity.event.RegistrationCompleteEvent;
 import com.dev.springsecurity.service.UserService;
-import com.dev.springsecurity.utility.CommonUtil;
+import com.dev.springsecurity.util.CommonUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -35,7 +35,7 @@ public class UserRegistrationController {
 		return HttpStatus.BAD_REQUEST;
 	}
 
-	@GetMapping("/user/verify")
+	@PutMapping("/user/verify")
 	public String verifyUser(@RequestParam("token") String token) {
 		return userService.verifyUserToken(token);
 	}

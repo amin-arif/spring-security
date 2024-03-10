@@ -5,12 +5,11 @@ import com.dev.springsecurity.entity.User;
 import com.dev.springsecurity.entity.VerificationToken;
 import com.dev.springsecurity.repository.UserRepository;
 import com.dev.springsecurity.repository.VerificationTokenRepository;
+import com.dev.springsecurity.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -42,8 +41,7 @@ public class UserServiceImpl implements UserService {
 			return "Invalid token";
 		}
 
-		Date currentTime = Calendar.getInstance().getTime();
-		if (currentTime.getTime() - verificationToken.get().getExpirationTime().getTime() >= 0) {
+		if (CommonUtil.isTimeExpire(verificationToken.get().getExpirationTime())) {
 			return "Token expired";
 		}
 
